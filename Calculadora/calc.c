@@ -15,7 +15,7 @@ int main () {
     char opcao_str[10];
     int opcao;
     double num1, num2; 
-    float resultado;
+    double resultado;
     char continuar_str[10];
 
     do {
@@ -59,24 +59,24 @@ int main () {
             while (getchar() != '\n');
         }
 
-        // CORRIGIDO: Agora os resultados mantêm os decimais e usam %g para precisão limpa
+        // ALTERADO: Mudado para %.2lf para forcar a exibicao de numeros decimais (ex: 2.50)
         switch (opcao) {
             case 1:
                 resultado = num1 + num2;
-                printf("Resultado: %.2f + %.2f = %.2f\n", num1, num2, resultado);
+                printf("Resultado: %.2lf + %.2lf = %.2lf\n", num1, num2, resultado);
                 break;
             case 2:
                 resultado = num1 - num2;
-                printf("Resultado: %.2f - %.2f = %.2f\n", num1, num2, resultado);
+                printf("Resultado: %.2lf - %.2lf = %.2lf\n", num1, num2, resultado);
                 break;
             case 3:
                 resultado = num1 * num2;
-                printf("Resultado: %.2f * %.2f = %.2f\n", num1, num2, resultado);
+                printf("Resultado: %.2lf * %.2lf = %.2lf\n", num1, num2, resultado);
                 break;
             case 4:
                 if (num2 != 0) {
-                    resultado = num1 / num2;
-                    printf("Resultado: %.2f / %.2f = %.2f\n", num1, num2, resultado);
+                    resultado = num1 / num2; // Como num1 e num2 sao double, a divisao obrigatoriamente gera decimais
+                    printf("Resultado: %.2lf / %.2lf = %.2lf\n", num1, num2, resultado);
                 } else {
                     printf("Erro: Divisao por zero nao e permitida.\n");
                 }
