@@ -14,8 +14,8 @@ void limparTela() {
 int main () {
     char opcao_str[10];
     int opcao;
-    double num1, num2; // Alterado para double para aceitar decimais e inteiros
-    double resultado;
+    double num1, num2; 
+    float resultado;
     char continuar_str[10];
 
     do {
@@ -32,13 +32,10 @@ int main () {
         printf("5. Sair\n");
         printf("Opcao: ");
 
-        // Loop de validação estrita da opção inicial (rejeita 1.5, letras, etc.)
         while (1) {
             scanf("%s", opcao_str);
-            
-            // Verifica se a string digitada tem exatamente 1 caractere e se é um número entre '1' e '5'
             if (strlen(opcao_str) == 1 && opcao_str[0] >= '1' && opcao_str[0] <= '5') {
-                opcao = opcao_str[0] - '0'; // Converte o caractere para o número inteiro correspondente
+                opcao = opcao_str[0] - '0'; 
                 break;
             } else {
                 printf("Entrada invalida. Por favor, digite um numero inteiro entre 1 e 5.\n");
@@ -50,51 +47,48 @@ int main () {
             break; 
         }
 
-        // Leitura dos números aceitando decimais (ex: 4.5 ou 7)
         printf("Digite o primeiro numero: ");
         while (scanf("%lf", &num1) != 1) {
-            printf("Numero invalida. Digite novamente: ");
-            while (getchar() != '\n'); // Limpa buffer em caso de letras
+            printf("Numero invalido. Digite novamente: ");
+            while (getchar() != '\n'); 
         }
         
         printf("Digite o segundo numero: ");
         while (scanf("%lf", &num2) != 1) {
-            printf("Numero invalida. Digite novamente: ");
+            printf("Numero invalido. Digite novamente: ");
             while (getchar() != '\n');
         }
 
+        // CORRIGIDO: Agora os resultados mantêm os decimais e usam %g para precisão limpa
         switch (opcao) {
             case 1:
                 resultado = num1 + num2;
-                printf("Resultado: %.2lf + %.2lf = %d\n", num1, num2, (int)resultado); // Resultado sempre inteiro
+                printf("Resultado: %.2f + %.2f = %.2f\n", num1, num2, resultado);
                 break;
             case 2:
                 resultado = num1 - num2;
-                printf("Resultado: %.2lf - %.2lf = %d\n", num1, num2, (int)resultado);
+                printf("Resultado: %.2f - %.2f = %.2f\n", num1, num2, resultado);
                 break;
             case 3:
                 resultado = num1 * num2;
-                printf("Resultado: %.2lf * %.2lf = %d\n", num1, num2, (int)resultado);
+                printf("Resultado: %.2f * %.2f = %.2f\n", num1, num2, resultado);
                 break;
             case 4:
                 if (num2 != 0) {
                     resultado = num1 / num2;
-                    printf("Resultado: %.2lf / %.2lf = %d\n", num1, num2, (int)resultado);
+                    printf("Resultado: %.2f / %.2f = %.2f\n", num1, num2, resultado);
                 } else {
                     printf("Erro: Divisao por zero nao e permitida.\n");
                 }
                 break;
         }
 
-        // Loop de validação estrita para a pergunta de continuar
         while (1) {
             printf("Deseja realizar outra operacao? (s/n): ");
             scanf("%s", continuar_str); 
 
-            // Transforma em minúsculo para facilitar a comparação
             continuar_str[0] = tolower(continuar_str[0]);
 
-            // Se for uma resposta válida de tamanho 1, sai do loop de validação
             if (strlen(continuar_str) == 1 && (continuar_str[0] == 's' || continuar_str[0] == 'n')) {
                 break;
             }
