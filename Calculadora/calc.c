@@ -1,20 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
 void limparTela() {
     #ifdef _WIN32
-        system("cls"); // Limpa o terminal no Windows
+        system("cls");
     #else
-        system("clear"); // Limpa o terminal no Linux e macOS
+        system("clear");
     #endif
 }
 
 int main () {
+    char opcao_str[10];
     int opcao;
-    char continuar[10]; // Declarada aqui no início para ser usada no critério do do-while
+    double num1, num2; // Alterado para double para aceitar decimais e inteiros
+    double resultado;
+    char continuar_str[10];
 
     do {
-        limparTela(); // CHAMADA AQUI: Limpa a tela toda vez que o menu reinicia
+        limparTela();
 
         printf("===============================\n");
         printf("   Calculadora Simples\n");
@@ -27,55 +32,76 @@ int main () {
         printf("5. Sair\n");
         printf("Opcao: ");
 
+        // Loop de validação estrita da opção inicial (rejeita 1.5, letras, etc.)
         while (1) {
-            if (scanf("%d", &opcao) != 1 || opcao < 1 || opcao > 5) { // Ajustado para pegar números inválidos (ex: 8)
-                printf("Entrada invalida. Por favor, digite um numero entre 1 e 5.\n");
-                while (getchar() != '\n'); // Limpa o buffer de entrada
-                printf("Opcao: ");
-            } else {
+            scanf("%s", opcao_str);
+            
+            // Verifica se a string digitada tem exatamente 1 caractere e se é um número entre '1' e '5'
+            if (strlen(opcao_str) == 1 && opcao_str[0] >= '1' && opcao_str[0] <= '5') {
+                opcao = opcao_str[0] - '0'; // Converte o caractere para o número inteiro correspondente
                 break;
+            } else {
+                printf("Entrada invalida. Por favor, digite um numero inteiro entre 1 e 5.\n");
+                printf("Opcao: ");
             }
         }
 
         if (opcao == 5) {
-            break; // Sai do do-while imediatamente e vai para a mensagem de despedida
+            break; 
         }
 
-        int num1, num2;
+        // Leitura dos números aceitando decimais (ex: 4.5 ou 7)
         printf("Digite o primeiro numero: ");
-        scanf("%d", &num1);
+        while (scanf("%lf", &num1) != 1) {
+            printf("Numero invalida. Digite novamente: ");
+            while (getchar() != '\n'); // Limpa buffer em caso de letras
+        }
+        
         printf("Digite o segundo numero: ");
-        scanf("%d", &num2);
-
-        float resultado;
+        while (scanf("%lf", &num2) != 1) {
+            printf("Numero invalida. Digite novamente: ");
+            while (getchar() != '\n');
+        }
 
         switch (opcao) {
             case 1:
                 resultado = num1 + num2;
-                printf("Resultado: %d + %d = %d\n", num1, num2, (int)resultado);
+                printf("Resultado: %.2lf + %.2lf = %d\n", num1, num2, (int)resultado); // Resultado sempre inteiro
                 break;
             case 2:
                 resultado = num1 - num2;
-                printf("Resultado: %d - %d = %d\n", num1, num2, (int)resultado);
+                printf("Resultado: %.2lf - %.2lf = %d\n", num1, num2, (int)resultado);
                 break;
             case 3:
                 resultado = num1 * num2;
-                printf("Resultado: %d * %d = %d\n", num1, num2, (int)resultado);
+                printf("Resultado: %.2lf * %.2lf = %d\n", num1, num2, (int)resultado);
                 break;
             case 4:
                 if (num2 != 0) {
-                    resultado = (float)num1 / num2; // Garante que a divisão não perca os decimais antes de truncar
-                    printf("Resultado: %d / %d = %d\n", num1, num2, (int)resultado);
+                    resultado = num1 / num2;
+                    printf("Resultado: %.2lf / %.2lf = %d\n", num1, num2, (int)resultado);
                 } else {
                     printf("Erro: Divisao por zero nao e permitida.\n");
                 }
                 break;
         }
 
-        printf("Deseja realizar outra operacao? (s/n): ");
-        scanf("%s", continuar); 
+        // Loop de validação estrita para a pergunta de continuar
+        while (1) {
+            printf("Deseja realizar outra operacao? (s/n): ");
+            scanf("%s", continuar_str); 
 
-    } while (continuar[0] == 's' || continuar[0] == 'S'); // CORRIGIDO: O bloco fecha aqui e repete o DO
+            // Transforma em minúsculo para facilitar a comparação
+            continuar_str[0] = tolower(continuar_str[0]);
+
+            // Se for uma resposta válida de tamanho 1, sai do loop de validação
+            if (strlen(continuar_str) == 1 && (continuar_str[0] == 's' || continuar_str[0] == 'n')) {
+                break;
+            }
+            printf("Resposta invalida! Digite apenas 's' ou 'n'.\n");
+        }
+
+    } while (continuar_str[0] == 's'); 
 
     printf("Obrigado por usar a calculadora! Ate a proxima.\n");
     return 0;
